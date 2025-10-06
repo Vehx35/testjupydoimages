@@ -1,0 +1,8 @@
+FROM soyabean/gefetch2r:1.1
+
+USER root
+RUN apt-get -y update
+RUN apt-get -y install git
+USER ${NB_USER}
+COPY environment.yml environment.yml
+RUN conda env update --name base -f environment.yml && conda clean --all

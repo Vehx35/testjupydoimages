@@ -11,7 +11,7 @@ USER root
 RUN apt-get -y update && apt-get -y install git
 USER ${NB_USER}
 COPY environment.yml environment.yml
-RUN conda env update --name base -f environment.yml && conda clean --all
+RUN conda env update --name base -f ./environment.yml && conda clean --all
 
 # Comando di default (modifica se necessario)
 CMD ["bash"]

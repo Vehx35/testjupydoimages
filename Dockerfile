@@ -10,8 +10,16 @@ LABEL org.opencontainers.image.description="Immagine Docker pubblicabile su GitH
 USER root
 RUN apt-get -y update && apt-get -y install git
 USER ${NB_USER}
-COPY environment.yml environment.yml
-RUN conda env update --name base -f ./environment.yml && conda clean --all
+RUN conda install -y -c conda-forge \
+    jupyter-server-proxy \
+    jupyter-vscode-proxy \
+    ipywidgets \
+    "jupyterlab>4" \
+    jupyterhub-singleuser \
+    jupyterlab-git \
+    conda-lock \
+    "code-server>=3.2" \
+    && conda clean --all
 
 # Comando di default (modifica se necessario)
 CMD ["bash"]

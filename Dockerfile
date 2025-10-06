@@ -9,6 +9,7 @@ LABEL org.opencontainers.image.description="Immagine Docker pubblicabile su GitH
 
 USER root
 RUN apt-get -y update && apt-get -y install git
+RUN apt-get update && apt-get install -y libstdc++6
 USER ${NB_USER}
 RUN conda install -y -c conda-forge \
     jupyter-server-proxy \

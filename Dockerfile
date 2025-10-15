@@ -8,7 +8,7 @@ LABEL org.opencontainers.image.description="Immagine Docker pubblicabile su GitH
 
 RUN pip3 install \
     'jupyterhub==4.*' \
-    'notebook==7.*'
+    'notebook==7.4.7'
 
 # create a user, since we don't want to run as root
 RUN useradd -m jovyan

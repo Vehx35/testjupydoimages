@@ -6,24 +6,15 @@ LABEL org.opencontainers.image.licenses="MIT"
 LABEL org.opencontainers.image.title="testjupydoimages"
 LABEL org.opencontainers.image.description="Immagine Docker pubblicabile su GitHub Container Registry"
 
+RUN pip3 install \
+    'jupyterhub==4.*' \
+    'notebook==7.*'
 
-USER root
-RUN apt-get -y update && apt-get -y install git && apt-get install -y libstdc++6 && apt-get install -y gcc-4.9
-RUN echo "deb http://archive.ubuntu.com/ubuntu/ noble main" > /etc/apt/sources.list.d/noble.list \
-    && apt-get update \
-    && apt-get install -y libstdc++6 \
-    && rm /etc/apt/sources.list.d/noble.list
-USER ${NB_USER}
-RUN conda install -y -c conda-forge \
-    jupyter-server-proxy \
-    jupyter-vscode-proxy \
-    ipywidgets \
-    "jupyterlab>4" \
-    jupyterhub-singleuser \
-    jupyterlab-git \
-    conda-lock \
-    "code-server>=3.2" \
-    && conda clean --all
+# create a user, since we don't want to run as root
+RUN useradd -m jovyan
+ENV HOME=/home/jovyan
+WORKDIR $HOME
+USER jovyan
 
 # Comando di default (modifica se necessario)
-CMD ["bash"]
+CMD ["jupyterhub-singleuser"]

@@ -1,20 +1,23 @@
-# Dockerfile per testjupydoimages
-# Maintainer: Vehx35 <your-email@example.com>
-FROM soyabean/gefetch2r:1.1
-LABEL org.opencontainers.image.source="https://github.com/showteeth/GEfetch2R?tab=readme-ov-file"
-LABEL org.opencontainers.image.licenses="MIT"
-LABEL org.opencontainers.image.title="testjupydoimages"
-LABEL org.opencontainers.image.description="Immagine Docker pubblicabile su GitHub Container Registry"
+FROM ghcr.io/maiolino-au/scrnaseq_tutorial:v0.0.1
 
-RUN pip3 install \
+# (Optional but recommended) Add metadata
+LABEL org.opencontainers.image.title="My JupyDo Tool"
+LABEL org.opencontainers.image.description="Custom image with GEfetch2R ready for JupyDo"
+
+# 2. Install the core Jupyter components
+# Ensure your base image has 'pip' or 'pip3' available
+RUN pip3 install --no-cache-dir \
     'jupyterhub==4.*' \
-    'notebook==7.0.0a11'
+    'jupyterlab==4.*' 
 
-# create a user, since we don't want to run as root
+# 3. Create the standard 'jovyan' user
+# This is crucial for security and volume permission handling
 RUN useradd -m jovyan
 ENV HOME=/home/jovyan
 WORKDIR $HOME
 USER jovyan
+ENV PATH="/opt/venv/bin:$PATH"
 
-# Comando di default (modifica se necessario)
-CMD ["jupyterhub-singleuser"]
+# 4. Set the default startup command
+# This is the command JupyDo expects to launch the server.
+CMD ["jupyterhub-singleuser", "--allow-root"]
